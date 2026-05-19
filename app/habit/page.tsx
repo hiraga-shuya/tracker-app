@@ -68,8 +68,10 @@ export default async function Habit({
       <ul className="space-y-5">
         {sortedHabits.map((habit) => {
           const streak = getHabitStreak(habit.records);
-
-          const iconData = habitIcons[habit.icon_type] ?? habitIcons.book;
+          
+          const iconData =
+          habitIcons[habit.icon_type as keyof typeof habitIcons] ??
+          habitIcons.book;
 
           return (
             <li

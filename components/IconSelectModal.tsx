@@ -12,7 +12,8 @@ type Props = {
 export default function IconSelectModal({ value, onChange }: Props) {
   const [open, setOpen] = useState(false);
 
-  const currentIcon = habitIcons[value] ?? habitIcons.book;
+  const iconKey = value as keyof typeof habitIcons;
+  const currentIcon = habitIcons[iconKey] ?? habitIcons.book;
 
   return (
     <div>

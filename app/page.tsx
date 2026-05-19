@@ -63,7 +63,8 @@ export default async function Home() {
           });
 
           const streak = getHabitStreak(habit.records);
-          const iconData = habitIcons[habit.icon_type] ?? habitIcons.book;
+          const iconKey = habit.icon_type as keyof typeof habitIcons;
+          const iconData = habitIcons[iconKey] ?? habitIcons.book;
 
           return (
             <div
