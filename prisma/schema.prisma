@@ -7,6 +7,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  // ログインするためのユーザー情報データ
+  id         String       @id //idの自動生成はcookie側で行う
+  name       String
+  image      String?
+  created_at DateTime     @default(now()) //@default(now())=レコード作成時の日時を返す
+  habits     Habit_Task[] //Habit_Taskテーブルの値を配列形式で返す
+}
+
+model Habit_Task {
+  // ユーザーごとに登録できる習慣タスクのデータ
+  id         String         @id @default(cuid()) //ユニークなIDを自動で生成
+  userId     String
+  user       User           @relation(fields: [userId], references: [id])
+  //Habit_Task.userId と User.id を紐づけ。User.idに存在しない値が入った場合エラーを返す。
+  name       String
+  icon_type  String         @default("book") //カテゴリアイコン
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt //同一レコード内で何か更新されたタイミングでその時のサーバー日時が入る
+  deleted_at DateTime? // 削除されたタイミングでその時のサーバー日時が入る（？をつけることでnull許可）
+  is_active  Boolean        @default(true) //Boolean=トグル。@default(true)にしているので、ユーザー画面側から特に値が返ってこなければtrueにする
+  records    Habit_Record[] //Habit_Recordテーブルの値を配列形式で返す
+
+  @@index([userId]) //頻繁にクエリで呼び出すデータなのでインデックスさせる
+}
+
+model Habit_Record {
+  // 習慣タスクの達成記録データ（一日単位で記録）
+  id            String     @id @default(cuid())
+  habit_task_id String
+  date          DateTime   @default(now()) //同一の習慣タスクは1日1回まで、の判断用のデータ
+  created_at    DateTime   @default(now()) //レコード作成時の日時を返す。機能上は不要ですが、何かあったとき用の記録として必要。
+  habit_task    Habit_Task @relation(fields: [habit_task_id], references: [id]) // 「Habit_Record.habit_task_id」と「Habit_Task.id」を紐づけ。Habit_Task.idに存在しない値が入った場合エラーを返す。
+
+  @@unique([habit_task_id, date]) // 「習慣タスクID / 日付」が同一のものは登録できない。（一日に2回、同じタスクを達成することはできない制約）
+  @@index([habit_task_id]) //頻繁にクエリで呼び出すデータなのでインデックスさせる
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  title       String
+  description String?
+  icon        String?
+  createdAt   DateTime @default(now())
+}
+
+model UserAchievement {
+  id             String   @id @default(cuid())
+  userId         String
+  achievementKey String
+  unlockedAt     DateTime @default(now())
+
+  @@unique([userId, achievementKey])
+}
+
 model User {
   // ログインするためのユーザー情報データ
   id         String       @id //idの自動生成はcookie側で行う
