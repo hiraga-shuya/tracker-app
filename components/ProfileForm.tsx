@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   initialName: string;
-  initialImage: string;
 };
 
 type Achievement = {
@@ -14,12 +13,10 @@ type Achievement = {
   title: string;
 };
 
-export default function ProfileForm({ initialName, initialImage }: Props) {
+export default function ProfileForm({ initialName }: Props) {
   const router = useRouter();
 
   const [name, setName] = useState(initialName);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(initialImage || null);
 
   // =========================
   // 🏆 実績状態
@@ -46,24 +43,11 @@ export default function ProfileForm({ initialName, initialImage }: Props) {
     fetchAchievements();
   }, []);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const imageUrl = URL.createObjectURL(file);
-    setPreview(imageUrl);
-    setImageFile(file);
-  };
-
   const handleSave = async () => {
     try {
       const formData = new FormData();
 
       formData.append("name", name);
-
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
 
       const res = await fetch("/api/user/update", {
         method: "POST",
@@ -102,28 +86,12 @@ export default function ProfileForm({ initialName, initialImage }: Props) {
       {/* アバター */}
       <div className="game-panel flex flex-col items-center gap-4">
         <div className="w-24 h-24 border-4 border-black bg-[#f5f5f5] rounded-full overflow-hidden flex items-center justify-center shadow-[4px_4px_0_0_#000]">
-          {preview ? (
-            <img
-              src={preview}
-              alt="avatar"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <span className="text-xs text-gray-500">NO IMAGE</span>
-          )}
+          <img
+            src="/images/default.svg"
+            alt="avatar"
+            className="w-full h-full object-cover"
+          />
         </div>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-          id="avatar-upload"
-        />
-
-        <label htmlFor="avatar-upload" className="game-button cursor-pointer">
-          アバター変更
-        </label>
       </div>
 
       {/* 名前 */}

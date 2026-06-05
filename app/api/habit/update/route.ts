@@ -54,7 +54,6 @@ export async function POST(req: Request) {
   // =========================
   const unlockedAchievements = await Promise.all([
     unlockAchievement(userId, "first_name_change"),
-    unlockAchievement(userId, "first_image_change"),
   ]).then((results) => results.flat());
   // 実績が取得されるかの条件判定 + 取得される場合は実績解除の付与の処理を呼び出している
 

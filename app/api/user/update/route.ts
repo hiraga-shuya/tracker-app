@@ -1,6 +1,3 @@
-import fs from "fs/promises";
-import path from "path";
-
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
 import { unlockAchievement } from "@/lib/unlockAchievement";
@@ -19,38 +16,10 @@ export async function POST(req: Request) {
 
     const formData = await req.formData(); // プロフィール更新のため、formDataで送られてきた内容を取得。
     const name = formData.get("name") as string; // formDataからnameの値をstring型で取得
-    const image = formData.get("image") as File | null; // formDataからimageをFileオブジェクト（name,size,typeなどを持つ） or nullで取得
 
-    let imagePath: string | undefined; // imagePath変数をstring型 or undefinedで宣言。この時点では中身が空。
-
-    if (image && image.size > 0) {
-      // imageが存在し、ファイルサイズが0より大きい場合
-      const bytes = await image.arrayBuffer(); // 画像をバイナリデータとして取得
-      const buffer = Buffer.from(bytes); // バイナリデータをNode.jsで扱えるBuffer形式に変換
-
-      const fileName = `${Date.now()}-${image.name}`; //fileNameを定義する変数に、$今日の日付$-$画像の名前$という値を格納
-      const uploadDir = path.join(process.cwd(), "public/uploads"); // 画像保存先フォルダの絶対パスを作っている
-
-      await fs.mkdir(uploadDir, { recursive: true }); // uploadsフォルダが無ければ作成
-
-      const filePath = path.join(uploadDir, fileName); // 保存する画像ファイルのフルパスを生成
-
-      await fs.writeFile(filePath, buffer); // Buffer化した画像データをサーバーに保存
-
-      imagePath = `/uploads/${fileName}`;
-    }
-
-    const updateData: {
-      // updateDataオブジェクトの型定義（nameは必須、imageは任意）
-      name: string;
-      image?: string;
-    } = {
-      name: name, // nameというupdateDataの箱に、nameの値を格納している
+    const updateData = {
+      name,
     };
-
-    if (imagePath) {
-      updateData.image = imagePath; // DBに格納するimageカラムの内容について、imagePathの内容に更新する
-    }
 
     await prisma.user.update({
       where: { id: userId }, // 今回更新するユーザーIDのUserのデータを絞り込む。
@@ -63,7 +32,6 @@ export async function POST(req: Request) {
     const unlockedAchievements = await Promise.all([
       // この操作で解除される可能性がある実績を発火。
       unlockAchievement(userId, "first_name_change"), // 初めて名前を変更した　実績が解除される可能性があるので宣言
-      unlockAchievement(userId, "first_image_change"), // 初めて画像を変更した　実績が解除される可能性があるので宣言
     ]).then((results) => results.flat());
 
     return Response.json({

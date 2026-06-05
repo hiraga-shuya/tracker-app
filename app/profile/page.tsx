@@ -16,10 +16,5 @@ export default async function ProfilePage() {
     },
   });
 
-  return (
-    <ProfileForm
-      initialName={user?.name ?? ""}
-      initialImage={user?.image ?? ""}
-    />
-  );
+  return <ProfileForm initialName={user?.name ?? ""} />;
 }

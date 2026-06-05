@@ -39,7 +39,7 @@ export default function Header({ name, image }: Props) {
             <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-black bg-[#ddd]">
               {image ? (
                 <img
-                  src={image}
+                  src={image || "/images/default-avatar.png"}
                   alt="プロフィール画像"
                   className="h-full w-full object-cover"
                 />
