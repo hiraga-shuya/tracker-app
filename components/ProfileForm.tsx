@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   initialName: string;
+  initialImage?: string | null;
 };
 
 type Achievement = {
@@ -13,10 +14,27 @@ type Achievement = {
   title: string;
 };
 
-export default function ProfileForm({ initialName }: Props) {
+export default function ProfileForm({ initialName, initialImage }: Props) {
   const router = useRouter();
 
   const [name, setName] = useState(initialName);
+
+  // =========================
+  // 🖼️ プロフィール画像の状態
+  // =========================
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // 画像が選ばれたら、保存前でもプレビューで確認できるようにする
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
 
   // =========================
   // 🏆 実績状態
@@ -45,9 +63,16 @@ export default function ProfileForm({ initialName }: Props) {
 
   const handleSave = async () => {
     try {
+      setIsSaving(true);
+
       const formData = new FormData();
 
       formData.append("name", name);
+
+      // 画像が選ばれていれば一緒に送る（選ばれていなければ今の画像のまま）
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
 
       const res = await fetch("/api/user/update", {
         method: "POST",
@@ -78,6 +103,8 @@ export default function ProfileForm({ initialName }: Props) {
     } catch (e) {
       console.error(e);
       alert("保存に失敗しました");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -87,11 +114,33 @@ export default function ProfileForm({ initialName }: Props) {
       <div className="game-panel flex flex-col items-center gap-4">
         <div className="w-24 h-24 border-4 border-black bg-[#f5f5f5] rounded-full overflow-hidden flex items-center justify-center shadow-[4px_4px_0_0_#000]">
           <img
-            src="/images/default.svg"
+            src={imagePreview ?? initialImage ?? "/images/default.svg"}
             alt="avatar"
             className="w-full h-full object-cover"
           />
         </div>
+
+        {/* 画像の選択（保存ボタンを押すまで反映されない） */}
+        <label
+          htmlFor="profile-image-input"
+          className="border-4 border-black bg-white px-4 py-2 font-bold shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none cursor-pointer"
+        >
+          🖼️ 画像を変更
+        </label>
+
+        <input
+          id="profile-image-input"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageChange}
+        />
+
+        <p className="text-xs text-gray-500">
+          {imageFile
+            ? `選択中： ${imageFile.name}（SAVEで反映されます）`
+            : "画像を選んでSAVEを押すと、プロフィール画像が変わります（4MBまで）"}
+        </p>
       </div>
 
       {/* 名前 */}
@@ -130,8 +179,12 @@ export default function ProfileForm({ initialName }: Props) {
       </div>
 
       {/* 保存 */}
-      <button onClick={handleSave} className="game-button w-full text-lg">
-        SAVE
+      <button
+        onClick={handleSave}
+        disabled={isSaving}
+        className="game-button w-full text-lg disabled:opacity-50"
+      >
+        {isSaving ? "保存中..." : "SAVE"}
       </button>
     </div>
   );
