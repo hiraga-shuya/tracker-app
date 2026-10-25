@@ -185,3 +185,52 @@ body {
 .game-calendar .react-calendar__tile:active {
   transform: translateY(2px);
 }
+
+/* スマホではカレンダーを詰めて、月の移動ボタンが横にはみ出さないようにする */
+@media (max-width: 640px) {
+  .react-calendar {
+    padding: 10px !important;
+  }
+
+  .react-calendar__navigation {
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .react-calendar__navigation button {
+    min-width: 0 !important;
+    min-height: 40px !important;
+    padding: 0 2px;
+    font-size: 14px;
+    box-shadow: 3px 3px 0 #000;
+  }
+
+  /* 年単位の移動ボタンは隠して、月のラベルが欠けないようにする */
+  .react-calendar__navigation__prev2-button,
+  .react-calendar__navigation__next2-button {
+    display: none !important;
+  }
+
+  /* 月単位の移動ボタンは、指で押しやすい幅を確保する */
+  .react-calendar__navigation button.react-calendar__navigation__prev-button,
+  .react-calendar__navigation button.react-calendar__navigation__next-button {
+    min-width: 32px !important;
+  }
+
+  .react-calendar__navigation__label {
+    flex-grow: 1;
+  }
+
+  .react-calendar__month-view__weekdays__weekday {
+    font-size: 11px;
+  }
+
+  .react-calendar__tile {
+    height: 56px;
+    border-width: 2px !important;
+  }
+
+  .game-calendar abbr {
+    font-size: 12px;
+  }
+}

@@ -74,7 +74,7 @@ export default async function RootLayout({
           levelTitle={levelInfo.title}
         />
 
-        <main className="max-w-[900px] mx-auto p-6 pb-40">{children}</main>
+        <main className="max-w-[900px] mx-auto p-4 pb-40 sm:p-6 sm:pb-40">{children}</main>
 
         {userId && <FooterNav />}
       </body>

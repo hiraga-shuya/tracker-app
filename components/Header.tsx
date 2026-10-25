@@ -12,15 +12,17 @@ type Props = {
 export default function Header({ name, image, level, levelTitle }: Props) {
   return (
     <header className="sticky top-0 z-50 border-b-4 border-black bg-[#d6c29a] shadow-[0_4px_0_0_#000]">
-      <div className="mx-auto flex max-w-[900px] items-center justify-between px-4 py-3">
-        {/* タイトル */}
+      <div className="mx-auto flex max-w-[900px] flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* タイトル（スマホでは1段目に置き、文字が縦に折り返されないようにする） */}
         <Link
           href="/"
-          className="border-4 border-black bg-[#fff8dc] px-4 py-2 text-sm shadow-[4px_4px_0_0_#000]"
+          className="self-start border-4 border-black bg-[#fff8dc] px-4 py-2 text-sm shadow-[4px_4px_0_0_#000]"
         >
-          <div className="text-[10px] opacity-70">HABIT TRACKING GAME</div>
+          <div className="whitespace-nowrap text-[10px] opacity-70">
+            HABIT TRACKING GAME
+          </div>
 
-          <div className="text-lg font-bold tracking-wider">
+          <div className="whitespace-nowrap text-base font-bold tracking-wider sm:text-lg">
             習慣化頑張るくん
           </div>
         </Link>
