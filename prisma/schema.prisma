@@ -15,6 +15,8 @@ model User {
   created_at DateTime     @default(now()) //@default(now())=レコード作成時の日時を返す
   habits     Habit_Task[] //Habit_Taskテーブルの値を配列形式で返す
   accessDays User_Access_Day[] //アプリを開いた日の記録（起動日数の実績判定用）
+  reminders  Reminder[] //ユーザーが作った通知リマインダー
+  pushSubscriptions Push_Subscription[] //Web Push の購読情報（端末ごと）
 }
 
 model User_Access_Day {
@@ -73,4 +75,36 @@ model UserAchievement {
   unlockedAt     DateTime @default(now())
 
   @@unique([userId, achievementKey])
+}
+
+model Reminder {
+  // ユーザーが自由に作れる通知リマインダー。
+  // 習慣タスクとは紐づけない、独立した仕様（時刻と曜日だけで通知する）。
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  title      String // 通知のタイトル
+  body       String? // 通知の本文（任意）
+  hour       Int // 通知する時（0〜23、日本時間）
+  minute     Int // 通知する分（0〜59）
+  daysOfWeek Int[] // 通知する曜日（0=日曜〜6=土曜）。毎日の場合は全曜日を入れる
+  is_active  Boolean   @default(true) // 有効・無効の切り替え
+  lastSentAt DateTime? // 最後に送信した「予定日時」。二重送信の防止に使う
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Push_Subscription {
+  // Web Push の購読情報（端末・ブラウザごとに1件）
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  endpoint   String   @unique // 購読の宛先URL。端末の識別に使う
+  p256dh     String // 暗号化用の公開鍵
+  auth       String // 暗号化用の認証シークレット
+  created_at DateTime @default(now())
+
+  @@index([userId])
 }
