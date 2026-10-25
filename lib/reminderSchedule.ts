@@ -51,10 +51,13 @@ type ReminderLike = {
 // 定期実行（数分おきに呼ばれる）のタイミングで、このリマインダーを送るべきか。
 // 条件：有効である／今日が対象の曜日／予定時刻から windowMinutes 分以内／
 // その予定日時ではまだ送っていない。
+// 窓は広めに取る：呼び出し側（GitHub Actions のスケジュール実行）は
+// 混雑時に10分以上遅れることが珍しくないため、狭いと取りこぼす。
+// 二重送信は lastSentAt の記録で防ぐので、広げても重複はしない。
 export function shouldSendReminder(
   reminder: ReminderLike,
   now: Date,
-  windowMinutes = 10,
+  windowMinutes = 60,
 ): boolean {
   if (!reminder.is_active) return false;
 

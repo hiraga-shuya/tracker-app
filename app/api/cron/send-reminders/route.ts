@@ -8,7 +8,7 @@ import {
 
 // 定期実行から呼ばれて、予定時刻になったリマインダーを送信するAPI。
 // GitHub Actions のスケジュール実行（数分おき）から、CRON_SECRET 付きで呼ばれる想定。
-// 呼び出し側の遅延を吸収するため、予定時刻から10分以内なら送信し、
+// 呼び出し側の遅延を吸収するため、予定時刻から60分以内なら送信し、
 // 送信した予定日時は lastSentAt に記録して二重送信を防ぐ。
 export async function GET(req: Request) {
   const cronSecret = process.env.CRON_SECRET;
