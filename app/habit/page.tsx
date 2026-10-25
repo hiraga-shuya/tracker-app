@@ -18,9 +18,6 @@ export default async function Habit({
   const sort = params.sort ?? "new"; // 並び順について、選択された値をsort変数に格納。値がなければnewをセット。
   const userId = await getUserId(); // cookieStoreからuserIdを取得
 
-  const today = new Date(); // 今日の日時をtoday変数に格納
-  today.setHours(0, 0, 0, 0); //日付比較しやすいよう時刻部分を00:00:00にリセット
-
   const habits = await prisma.habit_Task.findMany({
     where: {
       userId,
@@ -104,12 +101,23 @@ export default async function Habit({
 
                   <div className="space-y-2">
                     <div>
-                      <p className="text-xs text-gray-500">ACTIVE QUEST</p>
+                      <p className="text-xs text-gray-500">QUEST</p>
 
                       <h2 className="text-2xl font-bold">{habit.name}</h2>
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
+                      <div
+                        className={`
+                              border-2 border-black
+                              px-3 py-1
+                              text-sm font-bold
+                              ${habit.is_active ? "bg-[#fff9c4]" : "bg-[#e0e0e0] text-gray-600"}
+                            `}
+                      >
+                        {habit.is_active ? "🟢 有効" : "⚪ 無効"}
+                      </div>
+
                       <div
                         className="
                               border-2 border-black
