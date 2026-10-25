@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { notifyUserStatusChanged } from "@/lib/toast";
+
 export default function UserRegister_Form() {
   const router = useRouter();
 
@@ -34,6 +36,8 @@ export default function UserRegister_Form() {
         throw new Error("failed");
       }
 
+      // ヘッダーの表示（ゲスト→登録した名前・レベル）も最新化する
+      notifyUserStatusChanged();
       router.refresh();
     } catch (e) {
       console.error(e);
