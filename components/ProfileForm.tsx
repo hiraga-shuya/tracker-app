@@ -5,11 +5,15 @@ import { useRouter } from "next/navigation";
 
 import { notifyUserStatusChanged, pushAchievement } from "@/lib/toast";
 
+import RecoveryCode from "@/components/RecoveryCode";
+
 type Props = {
   initialName: string;
   initialImage?: string | null;
   // 達成済みの実績一覧（サーバー側で取得して渡す。保存後の再描画で自動で最新になる）
   initialAchievements: Achievement[];
+  // 復旧コード（ユーザーID）。別環境からデータを引き継ぐときに使う
+  recoveryCode: string;
 };
 
 type Achievement = {
@@ -22,6 +26,7 @@ export default function ProfileForm({
   initialName,
   initialImage,
   initialAchievements,
+  recoveryCode,
 }: Props) {
   const router = useRouter();
 
@@ -173,6 +178,9 @@ export default function ProfileForm({
       >
         {isSaving ? "保存中..." : "SAVE"}
       </button>
+
+      {/* 復旧コード */}
+      <RecoveryCode code={recoveryCode} />
     </div>
   );
 }

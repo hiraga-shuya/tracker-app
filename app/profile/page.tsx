@@ -51,6 +51,7 @@ export default async function ProfilePage() {
       initialName={user?.name ?? ""}
       initialImage={user?.image}
       initialAchievements={achievements}
+      recoveryCode={userId}
     />
   );
 }
