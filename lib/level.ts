@@ -1,8 +1,9 @@
 import { levelTitles } from "@/src/constants/levelTitles";
 
-// レベルは「1 + 達成した実績の数」。実績を1つ達成するごとに1上がる
+// レベルは「達成した実績の数」そのもの。初期レベルは0で、
+// 実績を1つ達成するごとに1上がる（例：「初めてアプリを起動した」で Lv.1）
 export function getLevel(unlockedCount: number) {
-  return unlockedCount + 1;
+  return unlockedCount;
 }
 
 // レベル帯に応じた称号を返す（src/constants/levelTitles.ts のリストから、
