@@ -82,7 +82,7 @@ export default function HeaderStatus({
   return (
     <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end sm:gap-3">
       {/* ステータス（レベルと称号は達成した実績の数から算出） */}
-      <div className="border-4 border-black bg-[#fff8dc] px-2 py-2 shadow-[4px_4px_0_0_#000] md:px-3">
+      <div className="border-4 border-black bg-[#fff8dc] px-2 py-1.5 shadow-[4px_4px_0_0_#000] sm:py-2 md:px-3">
         <div className="text-[10px]">STATUS</div>
 
         <div className="mt-1 whitespace-nowrap text-xs md:text-sm">
@@ -93,7 +93,7 @@ export default function HeaderStatus({
       {/* プロフィール */}
       <Link
         href="/profile"
-        className="flex min-w-0 items-center gap-3 border-4 border-black bg-[#fff8dc] px-3 py-2 shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none"
+        className="flex min-w-0 items-center gap-3 border-4 border-black bg-[#fff8dc] px-3 py-1.5 shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none sm:py-2"
       >
         {/* アイコン */}
         <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border-2 border-black bg-[#ddd] sm:h-10 sm:w-10">

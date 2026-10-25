@@ -44,16 +44,16 @@ export default async function HabitCalendarPage({
           ACHIEVEMENT CALENDAR
         </p>
 
-        <h1 className="text-4xl font-black mb-3">{habit.name}</h1>
+        <h1 className="text-2xl font-black mb-2 sm:text-4xl sm:mb-3">{habit.name}</h1>
 
-        <p className="text-lg text-gray-700">この習慣の達成履歴だ！</p>
+        <p className="text-base text-gray-700 sm:text-lg">この習慣の達成履歴だ！</p>
 
         <div className="mt-4 flex flex-wrap gap-3">
           <div
             className="
               border-4 border-black
               bg-white
-              px-4 py-2
+              px-3 py-1.5 sm:px-4 sm:py-2
               font-bold
             "
           >
@@ -64,7 +64,7 @@ export default async function HabitCalendarPage({
             className="
               border-4 border-black
               bg-[#d8ffd8]
-              px-4 py-2
+              px-3 py-1.5 sm:px-4 sm:py-2
               font-bold
             "
           >

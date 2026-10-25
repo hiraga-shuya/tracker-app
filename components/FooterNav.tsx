@@ -46,7 +46,7 @@ export default function FooterNav() {
                   href={item.href}
                   className={`
                     flex flex-col items-center justify-center
-                    py-3
+                    py-2 sm:py-3
                     border-r-2 border-black
                     transition-all
                     ${
@@ -56,7 +56,7 @@ export default function FooterNav() {
                     }
                   `}
                 >
-                  <span className="text-xl">{item.icon}</span>
+                  <span className="text-lg sm:text-xl">{item.icon}</span>
 
                   <span
                     className="

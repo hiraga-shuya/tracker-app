@@ -48,7 +48,7 @@ export default async function Home() {
     randomMessages[Math.floor(Math.random() * randomMessages.length)]; //「0~0.999...のランダム値×メッセージの配列の要素数 = ランダムな整数を作り、その番号のメッセージを取得」
 
   return (
-    <div className="space-y-6 pb-28">
+    <div className="space-y-4 pb-28 sm:space-y-6">
       {/* 起動日数の実績が解除されたらトーストで知らせる */}
       <AchievementNotifier
         achievements={loginUnlocked.map((a) => ({ key: a.key, title: a.title }))}
@@ -58,7 +58,7 @@ export default async function Home() {
       <section className="game-panel">
         <p className="text-sm tracking-widest text-gray-600">DAILY QUEST</p>
 
-        <h1 className="text-3xl font-bold mb-3">習慣化がんばるくん</h1>
+        <h1 className="text-2xl font-bold mb-2 sm:text-3xl sm:mb-3">習慣化がんばるくん</h1>
 
         <p className="text-sm opacity-80 leading-relaxed">{randomMessage}</p>
       </section>
@@ -83,12 +83,12 @@ export default async function Home() {
                   hover:-translate-y-1
                 `}
             >
-              <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex items-start justify-between gap-3 flex-wrap sm:gap-4">
                 {/* 左 */}
-                <div className="flex gap-4">
+                <div className="flex gap-3 sm:gap-4">
                   <figure
                     className="
-                        w-16 h-16
+                        w-12 h-12 sm:w-16 sm:h-16
                         border-4 border-black
                         bg-white
                         flex items-center justify-center
@@ -100,6 +100,7 @@ export default async function Home() {
                       alt={iconData.label}
                       width={36}
                       height={36}
+                      className="h-7 w-7 sm:h-9 sm:w-9"
                     />
                   </figure>
 
@@ -107,7 +108,7 @@ export default async function Home() {
                     <div>
                       <p className="text-xs text-gray-500">ACTIVE QUEST</p>
 
-                      <h2 className="text-2xl font-bold">{habit.name}</h2>
+                      <h2 className="text-xl font-bold sm:text-2xl">{habit.name}</h2>
                     </div>
 
                     {/* ステータスバッジ */}
@@ -115,8 +116,8 @@ export default async function Home() {
                       <div
                         className={`
                             border-2 border-black
-                            px-3 py-1
-                            text-sm font-bold
+                            px-2 py-0.5 sm:px-3 sm:py-1
+                            text-xs font-bold sm:text-sm
                             ${doneToday ? "bg-[#c8e6c9]" : "bg-[#ffcdd2]"}
                           `}
                       >
@@ -127,8 +128,8 @@ export default async function Home() {
                         className="
                             border-2 border-black
                             bg-[#bbdefb]
-                            px-3 py-1
-                            text-sm font-bold
+                            px-2 py-0.5 sm:px-3 sm:py-1
+                            text-xs font-bold sm:text-sm
                           "
                       >
                         🔥 {streak}日継続中
@@ -138,8 +139,8 @@ export default async function Home() {
                         className="
                             border-2 border-black
                             bg-[#dcedc8]
-                            px-3 py-1
-                            text-sm font-bold
+                            px-2 py-0.5 sm:px-3 sm:py-1
+                            text-xs font-bold sm:text-sm
                           "
                       >
                         🎯 {habit.records.length}回
@@ -162,9 +163,9 @@ export default async function Home() {
 
       {/* 新規 */}
       <section className="game-panel">
-        <h2 className="text-xl font-bold mb-2">➕ NEW QUEST</h2>
+        <h2 className="text-lg font-bold mb-2 sm:text-xl">➕ NEW QUEST</h2>
 
-        <p className="mb-4 text-sm leading-relaxed">
+        <p className="mb-3 text-sm leading-relaxed sm:mb-4">
           小さな一歩からでも大丈夫！
         </p>
 
@@ -175,9 +176,9 @@ export default async function Home() {
 
       {/* 一覧 */}
       <section className="game-panel">
-        <h2 className="text-xl font-bold mb-2">📚 QUEST LOG</h2>
+        <h2 className="text-lg font-bold mb-2 sm:text-xl">📚 QUEST LOG</h2>
 
-        <p className="mb-4 text-sm leading-relaxed">習慣一覧ページはこちら</p>
+        <p className="mb-3 text-sm leading-relaxed sm:mb-4">習慣一覧ページはこちら</p>
 
         <Link href="/habit" className="game-button inline-block">
           習慣一覧へ
@@ -186,9 +187,9 @@ export default async function Home() {
 
       {/* お問い合わせ */}
       <section className="game-panel">
-        <h2 className="text-xl font-bold mb-2">💌 SUPPORT</h2>
+        <h2 className="text-lg font-bold mb-2 sm:text-xl">💌 SUPPORT</h2>
 
-        <p className="mb-4 text-sm leading-relaxed">不具合・要望はこちら</p>
+        <p className="mb-3 text-sm leading-relaxed sm:mb-4">不具合・要望はこちら</p>
 
         <Link href="/contact" className="game-button inline-block">
           お問い合わせへ
