@@ -4,6 +4,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
 import { getHabitStreak } from "@/lib/getHabitStreak";
+import { checkLoginAchievements } from "@/lib/checkLoginAchievements";
 import { getJstTodayKey, toJstDateKey } from "@/lib/date";
 
 import { habitIcons } from "@/src/constants/habitIcons";
@@ -12,6 +13,7 @@ import { randomMessages } from "@/src/constants/messages";
 import TodayButton from "@/components/TodayButton";
 import DeleteButton from "@/components/DeleteButton";
 import UserRegister from "@/components/UserRegister";
+import AchievementNotifier from "@/components/AchievementNotifier";
 
 export default async function Home() {
   const userId = await getUserId();
@@ -21,6 +23,9 @@ export default async function Home() {
   }
 
   const todayKey = getJstTodayKey(); // 「今日」は日本時間の日付で判定する
+
+  // アプリを開いた日を記録し、起動日数の実績を判定する（今日すでに記録済みなら何も起きない）
+  const loginUnlocked = await checkLoginAchievements(userId);
 
   //🌟 一覧表示用の元データをhabits変数に格納
   const habits = await prisma.habit_Task.findMany({
@@ -44,6 +49,11 @@ export default async function Home() {
 
   return (
     <div className="space-y-6 pb-28">
+      {/* 起動日数の実績が解除されたらトーストで知らせる */}
+      <AchievementNotifier
+        achievements={loginUnlocked.map((a) => ({ key: a.key, title: a.title }))}
+      />
+
       {/* タイトル */}
       <section className="game-panel">
         <p className="text-sm tracking-widest text-gray-600">DAILY QUEST</p>

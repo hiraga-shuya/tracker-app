@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
 import { unlockAchievement } from "@/lib/unlockAchievement";
+import { checkRecordAchievements } from "@/lib/checkRecordAchievements";
 import { getJstTodayKey, jstDateKeyToUtcDate } from "@/lib/date";
 
 export async function POST(req: Request) {
@@ -50,10 +51,12 @@ export async function POST(req: Request) {
   // =========================
   // 🏆 実績（統一版）
   // =========================
-  const unlockedAchievements = await Promise.all([
-    unlockAchievement(userId, "first_habit_done"), // 初めて習慣タスクを達成した。という実績が達成される可能性があるため、セット。
-  ]).then((results) => results.flat());
-  // 実績解除の可能性があるアチーブメントをセットし、unlockedAchievementsに渡す。
+  const unlockedAchievements = [
+    // 初めて習慣タスクを達成した。という実績が達成される可能性があるため、セット。
+    ...(await unlockAchievement(userId, "first_habit_done")),
+    // 連続日数・合計回数・カテゴリ別回数の実績も、記録のたびにまとめて判定する
+    ...(await checkRecordAchievements(userId, habit)),
+  ];
 
   return Response.json({
     success: true,

@@ -3,9 +3,11 @@ import Link from "next/link";
 type Props = {
   name: string;
   image?: string | null;
+  level: number;
+  levelTitle: string;
 };
 
-export default function Header({ name, image }: Props) {
+export default function Header({ name, image, level, levelTitle }: Props) {
   return (
     <header className="sticky top-0 z-50 border-b-4 border-black bg-[#d6c29a] shadow-[0_4px_0_0_#000]">
       <div className="mx-auto flex max-w-[900px] items-center justify-between px-4 py-3">
@@ -23,11 +25,13 @@ export default function Header({ name, image }: Props) {
 
         {/* 右側UI */}
         <div className="flex items-center gap-3">
-          {/* ステータス */}
-          <div className="hidden border-4 border-black bg-[#fff8dc] px-3 py-2 shadow-[4px_4px_0_0_#000] md:block">
+          {/* ステータス（レベルと称号は達成した実績の数から算出） */}
+          <div className="border-4 border-black bg-[#fff8dc] px-2 py-2 shadow-[4px_4px_0_0_#000] md:px-3">
             <div className="text-[10px]">STATUS</div>
 
-            <div className="mt-1 text-sm">Lv.1 がんばりびと</div>
+            <div className="mt-1 whitespace-nowrap text-xs md:text-sm">
+              Lv.{level} {levelTitle}
+            </div>
           </div>
 
           {/* プロフィール */}

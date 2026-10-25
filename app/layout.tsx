@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
+import { getLevelInfo } from "@/lib/level";
 
 import Header from "@/components/Header";
 import FooterNav from "@/components/FooterNav";
@@ -22,6 +23,7 @@ export default async function RootLayout({
   const userId = await getUserId();
 
   let user = null;
+  let unlockedCount = 0;
 
   if (userId) {
     user = await prisma.user.findUnique({
@@ -29,7 +31,16 @@ export default async function RootLayout({
         id: userId,
       },
     });
+
+    // レベル表示用に、達成済みの実績の数を数える
+    unlockedCount = await prisma.userAchievement.count({
+      where: {
+        userId,
+      },
+    });
   }
+
+  const levelInfo = getLevelInfo(unlockedCount);
 
   return (
     <html lang="ja">
@@ -49,7 +60,12 @@ export default async function RootLayout({
       </head>
       <body>
         <AchievementToast />
-        <Header name={user?.name ?? "ゲスト"} image={user?.image} />
+        <Header
+          name={user?.name ?? "ゲスト"}
+          image={user?.image}
+          level={levelInfo.level}
+          levelTitle={levelInfo.title}
+        />
 
         <main className="max-w-[900px] mx-auto p-6 pb-40">{children}</main>
 
