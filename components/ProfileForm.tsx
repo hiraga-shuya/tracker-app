@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+
+import { notifyUserStatusChanged, pushAchievement } from "@/lib/toast";
 
 type Props = {
   initialName: string;
   initialImage?: string | null;
+  // 達成済みの実績一覧（サーバー側で取得して渡す。保存後の再描画で自動で最新になる）
+  initialAchievements: Achievement[];
 };
 
 type Achievement = {
@@ -14,7 +18,11 @@ type Achievement = {
   title: string;
 };
 
-export default function ProfileForm({ initialName, initialImage }: Props) {
+export default function ProfileForm({
+  initialName,
+  initialImage,
+  initialAchievements,
+}: Props) {
   const router = useRouter();
 
   const [name, setName] = useState(initialName);
@@ -35,31 +43,6 @@ export default function ProfileForm({ initialName, initialImage }: Props) {
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   };
-
-  // =========================
-  // 🏆 実績状態
-  // =========================
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
-
-  // =========================
-  // 🏆 実績取得
-  // =========================
-  useEffect(() => {
-    const fetchAchievements = async () => {
-      try {
-        const res = await fetch("/api/user/achievements");
-        const data = await res.json();
-
-        console.log("🔥 ACHIEVEMENTS DEBUG:", data);
-
-        setAchievements(data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    fetchAchievements();
-  }, []);
 
   const handleSave = async () => {
     try {
@@ -95,8 +78,12 @@ export default function ProfileForm({ initialName, initialImage }: Props) {
       console.log("achievements:", unlocked);
 
       if (unlocked.length > 0) {
-        sessionStorage.setItem("achievement_unlock", JSON.stringify(unlocked));
+        // トースト表示＋ヘッダーのステータス最新化（pushAchievement が両方を行う）
+        pushAchievement(unlocked);
       }
+
+      // 名前や画像だけの変更でも、ヘッダー表示を最新化する
+      notifyUserStatusChanged();
 
       router.refresh();
       alert("保存しました！");
@@ -162,10 +149,10 @@ export default function ProfileForm({ initialName, initialImage }: Props) {
         <p className="text-xs text-gray-500 mb-2">ACHIEVEMENTS</p>
 
         <div className="max-h-48 overflow-y-auto space-y-2">
-          {achievements.length === 0 ? (
+          {initialAchievements.length === 0 ? (
             <p className="text-xs text-gray-400">まだ称号がありません</p>
           ) : (
-            achievements.map((a) => (
+            initialAchievements.map((a) => (
               <div
                 key={a.id}
                 className="border-2 border-black bg-white px-3 py-2 flex items-center gap-2"

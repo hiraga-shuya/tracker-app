@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import IconSelectModal from "@/components/IconSelectModal";
+import { pushAchievement } from "@/lib/toast";
 
 type Props = {
   mode: "create" | "edit";
@@ -65,10 +66,8 @@ export default function HabitForm({ mode, initial }: Props) {
       // Toast統一
       // =========================
       if (achievements.length > 0) {
-        sessionStorage.setItem(
-          "achievement_unlock",
-          JSON.stringify(achievements),
-        );
+        // トースト表示＋ヘッダーのステータス最新化（pushAchievement が両方を行う）
+        pushAchievement(achievements);
       }
 
       router.push(mode === "edit" ? "/habit" : "/");

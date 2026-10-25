@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { pushAchievement } from "@/lib/toast";
+
 export default function TodayButton({ habitId }: { habitId: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -38,10 +40,8 @@ export default function TodayButton({ habitId }: { habitId: string }) {
         : [];
 
       if (achievements.length > 0) {
-        sessionStorage.setItem(
-          "achievement_unlock",
-          JSON.stringify(achievements),
-        );
+        // トースト表示＋ヘッダーのステータス最新化（pushAchievement が両方を行う）
+        pushAchievement(achievements);
       }
 
       router.refresh();
