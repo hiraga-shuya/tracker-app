@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { notifyUserStatusChanged, pushAchievement } from "@/lib/toast";
@@ -204,6 +205,14 @@ export default function ProfileForm({
       >
         {isSaving ? "保存中..." : "SAVE"}
       </button>
+
+      {/* 通知リマインダー設定へのリンク */}
+      <Link
+        href="/reminders"
+        className="block w-full border-4 border-black bg-white px-4 py-2 text-center font-bold shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none"
+      >
+        🔔 通知リマインダー設定
+      </Link>
 
       {/* 復旧コード */}
       <RecoveryCode code={recoveryCode} />

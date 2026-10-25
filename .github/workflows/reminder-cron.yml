@@ -1,0 +1,20 @@
+# リマインダー送信APIを定期的に叩くためのスケジュール実行。
+# GitHub Actions のスケジュールは混雑時に数分遅れることがあるが、
+# 送信側（/api/cron/send-reminders）が「予定時刻から10分以内」を
+# 送信対象にしつつ二重送信を防ぐ作りなので、遅れは吸収できる。
+name: reminder-cron
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send due reminders
+        run: |
+          curl -fsS \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.APP_URL }}/api/cron/send-reminders"
