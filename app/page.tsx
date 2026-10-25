@@ -149,8 +149,8 @@ export default async function Home() {
                   </div>
                 </div>
 
-                {/* 右ボタン */}
-                <div className="flex flex-col gap-2">
+                {/* ボタン（今日やった・削除は横並びにする） */}
+                <div className="flex flex-wrap gap-2">
                   {!doneToday && <TodayButton habitId={habit.id} />}
 
                   <DeleteButton id={habit.id} />
