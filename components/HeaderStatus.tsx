@@ -80,7 +80,7 @@ export default function HeaderStatus({
   }, [refetch]);
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end sm:gap-3">
       {/* ステータス（レベルと称号は達成した実績の数から算出） */}
       <div className="border-4 border-black bg-[#fff8dc] px-2 py-2 shadow-[4px_4px_0_0_#000] md:px-3">
         <div className="text-[10px]">STATUS</div>
@@ -93,10 +93,10 @@ export default function HeaderStatus({
       {/* プロフィール */}
       <Link
         href="/profile"
-        className="flex items-center gap-3 border-4 border-black bg-[#fff8dc] px-3 py-2 shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none"
+        className="flex min-w-0 items-center gap-3 border-4 border-black bg-[#fff8dc] px-3 py-2 shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none"
       >
         {/* アイコン */}
-        <div className="h-10 w-10 overflow-hidden rounded-full border-2 border-black bg-[#ddd]">
+        <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border-2 border-black bg-[#ddd] sm:h-10 sm:w-10">
           {status.image ? (
             <img
               src={status.image || "/images/default-avatar.png"}
@@ -107,10 +107,10 @@ export default function HeaderStatus({
         </div>
 
         {/* 名前 */}
-        <div>
+        <div className="min-w-0">
           <div className="text-[10px] opacity-70">PLAYER</div>
 
-          <div className="max-w-[120px] truncate text-sm font-bold">
+          <div className="max-w-[110px] truncate text-sm font-bold sm:max-w-[120px]">
             {status.name}
           </div>
         </div>
