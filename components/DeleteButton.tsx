@@ -21,6 +21,15 @@ export default function DeleteButton({ id, redirectTo }: Props) {
     //onClick=handleDeleteが押されたら発火
     if (loading) return; // loadingがtrueになっていれば何もせずにreturn。連打防止処置
 
+    // 誤タップ防止のため、削除の前に確認する（削除した習慣は元に戻せない）
+    if (
+      !window.confirm(
+        "この習慣を削除しますか？\n削除した習慣は元に戻せません。",
+      )
+    ) {
+      return;
+    }
+
     setLoading(true); // loadingをtrueにセット。
 
     try {

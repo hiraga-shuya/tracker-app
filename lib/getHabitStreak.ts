@@ -1,32 +1,32 @@
+import {
+  getJstTodayKey,
+  shiftJstDateKey,
+  toJstDateKey,
+} from "@/lib/date";
+
 type HabitRecord = {
   date: Date;
 };
 
 export function getHabitStreak(records: HabitRecord[]) {
-  const today = new Date();
+  // 記録された日を、日本時間の日付キー（YYYY-MM-DD）の集合にする
+  const recordedDays = new Set(
+    records.map((record) => toJstDateKey(new Date(record.date))),
+  );
 
-  today.setHours(0, 0, 0, 0);
+  const todayKey = getJstTodayKey();
+
+  // 今日まだ記録していない場合は、昨日を起点に遡って数える。
+  // （今日記録していないだけで、継続が途切れた扱いにしない）
+  let cursor = recordedDays.has(todayKey)
+    ? todayKey
+    : shiftJstDateKey(todayKey, -1);
 
   let streak = 0;
 
-  const currentDate = new Date(today);
-
-  while (true) {
-    const exists = records.some((record) => {
-      const d = new Date(record.date);
-
-      d.setHours(0, 0, 0, 0);
-
-      return d.getTime() === currentDate.getTime();
-    });
-
-    if (!exists) {
-      break;
-    }
-
+  while (recordedDays.has(cursor)) {
     streak++;
-
-    currentDate.setDate(currentDate.getDate() - 1);
+    cursor = shiftJstDateKey(cursor, -1);
   }
 
   return streak;

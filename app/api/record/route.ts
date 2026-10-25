@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
 import { unlockAchievement } from "@/lib/unlockAchievement";
+import { getJstTodayKey, jstDateKeyToUtcDate } from "@/lib/date";
 
 export async function POST(req: Request) {
   const userId = await getUserId(); // cookieStoreからユーザーIDを取得
@@ -31,8 +32,8 @@ export async function POST(req: Request) {
     return new Response("Not found", { status: 404 });
   }
 
-  const today = new Date(); // 今日の日時をtoday変数に格納
-  today.setHours(0, 0, 0, 0); // 日付単位で条件判定を行えるデータで登録するため、時刻を0,0,0,0にセット
+  // 「今日」は日本時間で判定し、その日の0時（JST）を表す日時で登録する
+  const today = jstDateKeyToUtcDate(getJstTodayKey());
 
   try {
     await prisma.habit_Record.create({

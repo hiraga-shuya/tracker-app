@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
-import { unlockAchievement } from "@/lib/unlockAchievement";
 
 export async function POST(req: Request) {
   const userId = await getUserId(); //cookieStoreからユーザーIDを取得
@@ -49,13 +48,9 @@ export async function POST(req: Request) {
     return new Response("Not found", { status: 404 });
   }
 
-  // =========================
-  // 🏆 実績処理（統一版）
-  // =========================
-  const unlockedAchievements = await Promise.all([
-    unlockAchievement(userId, "first_name_change"),
-  ]).then((results) => results.flat());
-  // 実績が取得されるかの条件判定 + 取得される場合は実績解除の付与の処理を呼び出している
+  // 習慣の更新では実績は解除しない。
+  // （以前は誤って first_name_change の解除判定を呼んでいたため除去した）
+  const unlockedAchievements: never[] = [];
 
   // =========================
   // レスポンス

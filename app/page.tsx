@@ -4,6 +4,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/lib/getUserId";
 import { getHabitStreak } from "@/lib/getHabitStreak";
+import { getJstTodayKey, toJstDateKey } from "@/lib/date";
 
 import { habitIcons } from "@/src/constants/habitIcons";
 import { randomMessages } from "@/src/constants/messages";
@@ -19,8 +20,7 @@ export default async function Home() {
     return <UserRegister />;
   }
 
-  const today = new Date(); // 今日の日時をtoday変数に格納
-  today.setHours(0, 0, 0, 0); //習慣タスクの完了は一日1回の制約を課すため、日時の"時刻"を0,0,0,0に変更
+  const todayKey = getJstTodayKey(); // 「今日」は日本時間の日付で判定する
 
   //🌟 一覧表示用の元データをhabits変数に格納
   const habits = await prisma.habit_Task.findMany({
@@ -57,9 +57,7 @@ export default async function Home() {
       <section className="space-y-5">
         {habits.map((habit) => {
           const doneToday = habit.records.some((record) => {
-            const d = new Date(record.date);
-            d.setHours(0, 0, 0, 0);
-            return d.getTime() === today.getTime();
+            return toJstDateKey(new Date(record.date)) === todayKey;
           });
 
           const streak = getHabitStreak(habit.records);
