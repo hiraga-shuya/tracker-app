@@ -186,8 +186,18 @@ body {
   transform: translateY(2px);
 }
 
-/* スマホではカレンダーを詰めて、月の移動ボタンが横にはみ出さないようにする */
+/* スマホでは全体を少し詰めて、スクロール量を減らす */
 @media (max-width: 640px) {
+  .game-panel {
+    padding: 12px;
+  }
+
+  .game-button {
+    padding: 6px 12px;
+    font-size: 15px;
+  }
+
+  /* カレンダー：月の移動ボタンが横にはみ出さないようにする */
   .react-calendar {
     padding: 10px !important;
   }

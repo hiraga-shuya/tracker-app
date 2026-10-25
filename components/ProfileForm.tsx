@@ -101,7 +101,7 @@ export default function ProfileForm({
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 space-y-6">
+    <div className="max-w-md mx-auto p-4 space-y-4 sm:space-y-6">
       {/* アバター */}
       <div className="game-panel flex flex-col items-center gap-4">
         <div className="w-24 h-24 border-4 border-black bg-[#f5f5f5] rounded-full overflow-hidden flex items-center justify-center shadow-[4px_4px_0_0_#000]">

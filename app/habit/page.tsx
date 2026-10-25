@@ -43,7 +43,7 @@ export default async function Habit({
           <div>
             <p className="text-sm tracking-widest text-gray-600">QUEST MENU</p>
 
-            <h1 className="text-3xl font-bold">習慣クエスト一覧</h1>
+            <h1 className="text-2xl font-bold sm:text-3xl">習慣クエスト一覧</h1>
           </div>
 
           <Link href="/habit/new" className="game-button inline-block">
@@ -79,12 +79,12 @@ export default async function Habit({
                     hover:-translate-y-1
                   "
             >
-              <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex items-start justify-between gap-3 flex-wrap sm:gap-4">
                 {/* 左側 */}
-                <div className="flex gap-4">
+                <div className="flex gap-3 sm:gap-4">
                   <figure
                     className="
-                          w-16 h-16
+                          w-12 h-12 sm:w-16 sm:h-16
                           border-4 border-black
                           bg-white
                           flex items-center justify-center
@@ -96,6 +96,7 @@ export default async function Habit({
                       alt={iconData.label}
                       width={36}
                       height={36}
+                      className="h-7 w-7 sm:h-9 sm:w-9"
                     />
                   </figure>
 
@@ -103,15 +104,15 @@ export default async function Habit({
                     <div>
                       <p className="text-xs text-gray-500">QUEST</p>
 
-                      <h2 className="text-2xl font-bold">{habit.name}</h2>
+                      <h2 className="text-xl font-bold sm:text-2xl">{habit.name}</h2>
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
                       <div
                         className={`
                               border-2 border-black
-                              px-3 py-1
-                              text-sm font-bold
+                              px-2 py-0.5 sm:px-3 sm:py-1
+                              text-xs font-bold sm:text-sm
                               ${habit.is_active ? "bg-[#fff9c4]" : "bg-[#e0e0e0] text-gray-600"}
                             `}
                       >
@@ -122,8 +123,8 @@ export default async function Habit({
                         className="
                               border-2 border-black
                               bg-[#dcedc8]
-                              px-3 py-1
-                              text-sm font-bold
+                              px-2 py-0.5 sm:px-3 sm:py-1
+                              text-xs font-bold sm:text-sm
                             "
                       >
                         🔥 {streak}日継続中
@@ -133,8 +134,8 @@ export default async function Habit({
                         className="
                               border-2 border-black
                               bg-[#bbdefb]
-                              px-3 py-1
-                              text-sm font-bold
+                              px-2 py-0.5 sm:px-3 sm:py-1
+                              text-xs font-bold sm:text-sm
                             "
                       >
                         ✅ 達成回数 {habit.records.length}
