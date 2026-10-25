@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
 
@@ -9,10 +9,16 @@ import { getLevelInfo } from "@/lib/level";
 import Header from "@/components/Header";
 import FooterNav from "@/components/FooterNav";
 import AchievementToast from "@/components/AchievementToast";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 
 export const metadata: Metadata = {
   title: "習慣化頑張るくん",
   description: "習慣化支援アプリ",
+};
+
+// PWA として開いたときのテーマカラー（マニフェストの theme_color と合わせる）
+export const viewport: Viewport = {
+  themeColor: "#ffd54f",
 };
 
 export default async function RootLayout({
@@ -59,6 +65,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <ServiceWorkerRegister />
         <AchievementToast />
         <Header
           name={user?.name ?? "ゲスト"}
