@@ -14,6 +14,18 @@ model User {
   image      String?
   created_at DateTime     @default(now()) //@default(now())=レコード作成時の日時を返す
   habits     Habit_Task[] //Habit_Taskテーブルの値を配列形式で返す
+  accessDays User_Access_Day[] //アプリを開いた日の記録（起動日数の実績判定用）
+}
+
+model User_Access_Day {
+  // アプリを開いた日を1日1件で記録するデータ（起動日数の実績判定用）
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id])
+  date   DateTime //その日の0時（JST）を表す日時。習慣の記録データと同じ形式で持つ
+
+  @@unique([userId, date]) //同じ日に2件は登録できない（開いた日は1日として数える）
+  @@index([userId])
 }
 
 model Habit_Task {
