@@ -95,15 +95,13 @@ export default function HeaderStatus({
         href="/profile"
         className="flex min-w-0 items-center gap-3 border-4 border-black bg-[#fff8dc] px-3 py-1.5 shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none sm:py-2"
       >
-        {/* アイコン */}
+        {/* アイコン（画像未設定のときは初期画像を表示する。プロフィール画面と合わせる） */}
         <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full border-2 border-black bg-[#ddd] sm:h-10 sm:w-10">
-          {status.image ? (
-            <img
-              src={status.image || "/images/default-avatar.png"}
-              alt="プロフィール画像"
-              className="h-full w-full object-cover"
-            />
-          ) : null}
+          <img
+            src={status.image || "/images/default.svg"}
+            alt="プロフィール画像"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         {/* 名前 */}

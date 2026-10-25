@@ -100,6 +100,32 @@ export default function ProfileForm({
     }
   };
 
+  // ログアウト：この端末の Cookie を消して未登録の状態に戻す。
+  // データ自体は消えないが、再び見るには復旧コードが必要になるため確認を挟む。
+  const handleLogout = async () => {
+    if (
+      !window.confirm(
+        "ログアウトしますか？\nこの端末では記録が見られなくなります。再び見るには復旧コードでの復旧が必要です。",
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/user/logout", { method: "POST" });
+
+      if (!res.ok) {
+        throw new Error("ログアウト失敗");
+      }
+
+      // Cookie が消えた状態でトップを開き直す（登録画面が表示される）
+      window.location.href = "/";
+    } catch (e) {
+      console.error(e);
+      alert("ログアウトに失敗しました");
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto p-4 space-y-4 sm:space-y-6">
       {/* アバター */}
@@ -181,6 +207,22 @@ export default function ProfileForm({
 
       {/* 復旧コード */}
       <RecoveryCode code={recoveryCode} />
+
+      {/* ログアウト */}
+      <div className="game-panel">
+        <p className="text-xs text-gray-500 mb-2">LOGOUT</p>
+
+        <p className="text-sm leading-relaxed mb-3">
+          この端末で記録が見られなくなります。データ自体は残るので、復旧コードがあればまた引き継げます。
+        </p>
+
+        <button
+          onClick={handleLogout}
+          className="w-full border-4 border-black bg-[#ffcdd2] px-4 py-2 font-bold shadow-[4px_4px_0_0_#000] transition-all hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#000] active:translate-y-[3px] active:shadow-none"
+        >
+          ログアウトする
+        </button>
+      </div>
     </div>
   );
 }
